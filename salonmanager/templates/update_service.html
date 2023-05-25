@@ -1,0 +1,14 @@
+<!-- update_service.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Update Service</h2><br></br>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class='btn btn-outline-info'>Update Service</button>
+    <br></br>
+    <a href="{% url 'list_services' %}" class="btn btn-outline-dark">Cancel</a>
+  </form>
+{% endblock %}
