@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{%block content%}
+<div class="row">
+    <div class="col-md-4 bg-light">
+      <form method="POST" action = "{% url 'display_bill' %}"  id="create-appointment-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for ='customer'>Customer:</label>
+          <select name="customer_name">
+        {% for customer in customer_list %}
+        <option value="{{ customer.id }}">{{ customer }}</option>
+        {% endfor %}
+    </select>
+        </div>
+        <div class="form-group">
+          <label for="id_staff_name">Staff Name:</label>
+          {{ appointment_details.staff_member.name }}<input type = 'text' name = "staff-name" class = 'hidden' value={{appointment_details.staff_member.id}}>
+        </div>
+        <div class="form-group">
+          <label for="id_date">Date:</label>
+          {{appointment_details.date}}<input type = 'text' class = 'hidden' name="date" value={{appointment_details.date}}>
+        </div>
+        <div class="form-group">
+          <label for="id_branch">Branch</label>
+          {{appointment_details.branch}}<input type = 'text' name="branch" class = 'hidden' value={{appointment_details.branch.id}}>
+        </div>
+        <div class="form-group">
+          <label for="id_start_time">Start Time:</label>
+          {{appointment_details.start_time}}<input type = 'time' name="start-time" class = 'hidden' value={{appointment_details.start_time}}>
+        </div>
+      
+    </div>
+    <div class="col-md-4 bg-light">
+      <div class="form-group">
+        <label>Services:</label><br>
+        {% for service in services %}
+            <div>
+                <input type="checkbox" name="services" value="{{ service.id }}" id="service-{{ service.id }}">
+                <label for="service-{{ service.id }}">{{ service.name }}</label>
+            </div>
+        {%endfor%}
+        
+        
+         
+        
+        <br>
+        <button type="Submit" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </form>
+    <div class="col-md-4 bg-light">
+    
+    </div>
+  </div>
+  
+  
+{%endblock%}

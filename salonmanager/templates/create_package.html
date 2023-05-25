@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Create Package</h1>
+  <form method="POST" action="{% url 'create_package' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_name">Name:</label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="id_description">Description:</label>
+      <textarea name="description" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="{{ form.price.id_for_label }}">Price:</label>
+      {{ form.price }}
+    </div>
+    
+    <button type="submit" class="btn btn-outline-primary">Create</button>
+    <br></br>
+    <a href="{% url 'list_package' %}" class="btn btn-outline-dark">Cancel</a>
+  </form>
+{% endblock %}

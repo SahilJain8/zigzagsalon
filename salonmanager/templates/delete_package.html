@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Delete Package</h1>
+  <p>Are you sure you want to delete the package "{{ package.name }}"?</p>
+  <form method="POST" action="{% url 'delete_package' package.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <br></br>
+    <a href="{% url 'list_package' %}" class="btn btn-outline-dark">Cancel</a>
+  </form>
+{% endblock %}
