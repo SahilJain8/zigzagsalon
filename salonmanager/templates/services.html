@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Services</h3>
+<a href="{% url 'create_service' %}" class="btn btn-outline-primary">Create</a>
+<br></br>
+<div class="row">
+  {% for service in services %}
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">{{ service.category }}</h5>
+        <h7 class="card-text">{{ service.name }}</h7>
+        <p class="card-text">Price: {{ service.price }}</p>
+        <p class="card-text">Duration: {{ service.duration }}</p>
+        <!-- Add more fields as needed -->
+        <a href="{% url 'update_service' service.id %}" class="btn btn-outline-info">Update</a>
+        <!-- Delete Button -->
+        <a href="{% url 'delete_service' service.id %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

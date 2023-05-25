@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{%block content%}
+<div class="card">
+    <div class="card-body">
+        <h2>Bill</h2>
+        <form method="post" action={% url 'booked_appointment' %}>
+            {% csrf_token %}
+        <p>Customer: <span id="customerName">{{customer_name}}<input class='hidden' name = 'customer_name' value={{customer_name.id}}></span></p>
+        <p>Services: <span id="selectedServices"> {% for service in services %} {{service.name}}<input type="checkbox" name="services" value="{{ service.id }}" checked>{%endfor%}
+        </span></p>
+        <p>Date: <span id="selectedDate">{{date}} <input class='hidden' name = 'date' value={{date}}>  </span></p>
+        <p>Branch: <span id="selectedBranch">{{branch}} <input class='hidden' name = 'branch' value={{branch.id}}></span></p>
+        <p>Start Time: {{start_time}} <input type = "time" class='hidden' name = 'start_time' value={{start_time}}></p>
+        <p>End Time: <span id = 'endtime'>{{end_time}} <input type='time' class='hidden' name = 'end_time' value={{end_time}}></span></p>
+        <p>Staff Member: <span id = 'staff_member.id'>{{staff_member.name}} <input class='hidden' name = 'staff_member' value={{staff_member.id}}></span></p>
+        <p>Total Price: <span id="price">{{total_price}} <input class='hidden' name = 'price' value={{total_price}}>  </span></p>
+        <button type="Submit" class="btn btn-primary">Save Appointment</button>
+    </form>
+      </div>
+  </div>
+  {%endblock%}

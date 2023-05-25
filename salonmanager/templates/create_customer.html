@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Create Customer</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class='btn btn-outline-primary'>Create</button>
+    <br></br>
+    <a href="{% url 'list_customer' %}" class="btn btn-outline-dark">Cancel</a>
+</form>
+{% endblock %}
