@@ -2,6 +2,7 @@
 Django==4.2
 django-money==3.1.0
 django-six==1.0.5
-
+ pysqlite3
+pysqlite3-binary
 gunicorn==20.1.0
 
