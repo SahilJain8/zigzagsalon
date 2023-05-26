@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{%block content%}
+
+<table id = 'appointment-table'>
+    <thead>
+      <tr>
+        <th>Time</th>
+        {% for staff_member in staff_members %}
+        <th>{{ staff_member.name }}</th>
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for time_slot in time_slots %}
+        <tr class="short">
+          <th>{{ time_slot.time_12f }}</th>
+          
+          {% for staff_member in staff_members %}
+          
+
+            <td class="clickable {% for appointment_details in appointment_details_list  %}{% if appointment_details.status == 'booked' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f  %} booked {% elif appointment_details.status == 'cancelled' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} cancelled {% elif appointment_details.status == 'completed' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} completed  {% elif appointment_details.status == 'confirm' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} confirm {% endif %}  {% endfor %}">
+              <a onclick="sendToAPForm('{{ staff_member.id }}', '{{ time_slot.time_24f }}')" class="myLink {% for appointment_details in appointment_details_list  %}{% if appointment_details.status == 'booked' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f  %} booked {% elif appointment_details.status == 'cancelled' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} cancelled {% elif appointment_details.status == 'completed' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} completed  {% elif appointment_details.status == 'confirm' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} confirm {% endif %}{% endfor %}">
+                {% for appointment_details in appointment_details_list  %} {% if appointment_details.status == 'booked' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                  <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}<br> {{appointment_details.date}}</p>
+                  
+                {% endif %}
+                
+                {% if appointment_details.status == 'cancelled' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                  <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
+                  
+                {% endif %}
+               
+                 {% if appointment_details.status == 'completed' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                  <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
+                  
+                {% endif %}
+                
+                 {% if appointment_details.status == 'confirm' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                  <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
+                  
+                {% endif %}
+
+                {% endfor %}
+                <hr>
+              </a>
+              
+            </td>
+            
+          {% endfor %}
+
+          <!-- add more buttons here as needed -->
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {%endblock%}
+  {% block right%}
+  <form id="ap-form" action="{% url 'book_appointment' %}" method="POST">
+	{% csrf_token %}
+  <input type="hidden" name="form_identifier" value="form1">
+	<input type="text" name="staff-name" id="staff-name" class="hidden" >
+	<input name="start-time" id="start-time" class ="hidden">
+  	<label for="date">Select a date:</label>
+	<input type="date" id="date-picker" placeholder='{{formatted_date}}' name="date">
+  <label for="branch">Select Branch:</label>
+  <select name="branch" id="branch">
+    {% for branch in branch_all %}
+      <option value="{{ branch.id }}" {% if selected_branch == branch.id %}selected{% endif %}>{{ branch.name }}</option>
+    {% endfor %}
+  </select>
+  <button type = 'submit' class = "btn btn-outline-primary">Submit</button>
+</form>
+			<br></br><br></br>
+      <div class="status-card">
+        <span class="status-item">
+          <span class="status-color booked"></span>
+          <span class="status-label">Booked: </span>
+          <span class="status-value">{{number_of_app.booked_app}}</span>
+        </span>
+        <span class="status-item">
+          <span class="status-color cancelled"></span>
+          <span class="status-label">Cancelled: </span>
+          <span class="status-value">{{number_of_app.cancelled_app}}</span>
+        </span>
+        <span class="status-item">
+          <span class="status-color confirm"></span>
+          <span class="status-label">Confirmed: </span>
+          <span class="status-value">{{number_of_app.confirmed_app}}</span>
+        </span>
+        <span class="status-item">
+          <span class="status-color completed"></span>
+          <span class="status-label">Completed: </span>
+          <span class="status-value">{{number_of_app.completed_app}}</span>
+          
+        </span>
+      </div>
+      <div id="popupForm" class="hidden">
+        <h3>Booking Status</h3>
+        <form id="statusForm" action="{% url 'book_appointment' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="form_identifier" value="form2">
+          <input type="text"  name="appointment_id" id="appointmentId">
+          <input type="radio" name="option" value="confirm">confirm<br>
+          <input type="radio" name="option" value="cancelled">cancelled<br>
+          <input type="radio" name="option" value="completed">completed<br>
+          <button type="submit" class = 'btn btn-outline-info'>Submit</button>
+        </form>
+      </div>
+      
+
+{%endblock%}

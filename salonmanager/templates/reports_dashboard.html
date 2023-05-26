@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col-8 my-div">
+    <!-- Original content here -->
+    <!-- Replace this with the "Coming Soon" design -->
+    <div class="container">
+      <img src="path_to_your_logo.png" alt="Logo" class="logo">
+      <h1 class="title">Coming Soon</h1>
+      <p class="description">We are working hard to bring you an amazing website.</p>
+      <p class="countdown">Stay tuned! Launching in <span id="countdown-timer"></span></p>
+    </div>
+
+    <script>
+        // Replace the date below with your desired launch date and time
+        const launchDate = new Date("2023-06-01T09:00:00Z");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown-timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown-timer").innerHTML = "0d 0h 0m 0s";
+            }
+        }
+
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+{% endblock %}
