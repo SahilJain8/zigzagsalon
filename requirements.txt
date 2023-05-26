@@ -1,4 +1,7 @@
 asgiref
+psycopg2-binary~=2.9.3
+
+
 asttokens
 Babel
 backcall
