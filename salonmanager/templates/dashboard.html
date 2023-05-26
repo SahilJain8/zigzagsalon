@@ -25,18 +25,18 @@
                   <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}<br> {{appointment_details.date}}</p>
                   
                 {% endif %}
-                {% endfor %}
-                {% for appointment_details in appointment_details_list  %} {% if appointment_details.status == 'cancelled' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                
+                {% if appointment_details.status == 'cancelled' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
                   <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
                   
                 {% endif %}
-                {% endfor %}
-                {% for appointment_details in appointment_details_list  %} {% if appointment_details.status == 'completed' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+               
+                 {% if appointment_details.status == 'completed' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
                   <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
                   
                 {% endif %}
-                {% endfor %}
-                {% for appointment_details in appointment_details_list  %} {% if appointment_details.status == 'confirm' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
+                
+                 {% if appointment_details.status == 'confirm' and appointment_details.staff_member == staff_member and appointment_details.start_time == time_slot.time_12f %} 
                   <p id='details' style="text-align:center;">{{ appointment_details.customer }} {{appointment_details.id}}</p>
                   
                 {% endif %}
@@ -59,13 +59,14 @@
   {% block right%}
   <form id="ap-form" action="{% url 'book_appointment' %}" method="POST">
 	{% csrf_token %}
+  <input type="hidden" name="form_identifier" value="form1">
 	<input type="text" name="staff-name" id="staff-name" class="hidden" >
 	<input name="start-time" id="start-time" class ="hidden">
   	<label for="date">Select a date:</label>
-	<input type="date" id="date-picker" name="date">
+	<input type="date" id="date-picker" placeholder='{{formatted_date}}' name="date">
   <label for="branch">Select Branch:</label>
   <select name="branch" id="branch">
-    {% for branch in branches %}
+    {% for branch in branch_all %}
       <option value="{{ branch.id }}" {% if selected_branch == branch.id %}selected{% endif %}>{{ branch.name }}</option>
     {% endfor %}
   </select>
@@ -97,8 +98,9 @@
       </div>
       <div id="popupForm" class="hidden">
         <h3>Booking Status</h3>
-        <form id="statusForm" action="{% url 'change_appointment' %}" method="POST">
+        <form id="statusForm" action="{% url 'book_appointment' %}" method="POST">
           {% csrf_token %}
+          <input type="hidden" name="form_identifier" value="form2">
           <input type="text"  name="appointment_id" id="appointmentId">
           <input type="radio" name="option" value="confirm">confirm<br>
           <input type="radio" name="option" value="cancelled">cancelled<br>

@@ -11,6 +11,7 @@
         <option value="{{ customer.id }}">{{ customer }}</option>
         {% endfor %}
     </select>
+    <a href = '{% url "create_customer" %}' class="btn btn-outline-info">Add new</a>
         </div>
         <div class="form-group">
           <label for="id_staff_name">Staff Name:</label>

@@ -92,8 +92,9 @@
 			  
 			  #popupForm {
 				position: relative;
-				background: black;
+				background: aliceblue;
 				padding: 20px;
+				color : black
 			  }
 			  .status-card {
 				display: flex;
@@ -106,6 +107,7 @@
 				display: flex;
 				align-items: center;
 				gap: 5px;
+				color : black
 			  }
 			  
 			  .status-color {
@@ -131,7 +133,9 @@
 				background-color: green;
 			  }
 			  
-			  
+			  .current-time {
+				border-top: 1px solid red;
+			}
 			  
 	</style>
 	
@@ -151,7 +155,7 @@
 		<!-- First part content here -->
 		<ul>
 			<li class="hor-nav">
-				<a href="">DASHBOARD</a>
+				<a href="{% url 'manager_dashboard' %}">DASHBOARD</a>
 			</li>
 			<li class="hor-nav">
 				<a href="{%url 'list_product'%}">PRODUCTS</a>
@@ -238,6 +242,17 @@ form.submit();
 
 	
 };
+setInterval(function() {
+	var now = new Date();
+	var currentTime = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+	$('.current-time').removeClass('current-time');
+	$('tr.short').each(function() {
+		if ($(this).find('th').text() === currentTime) {
+			$(this).addClass('current-time');
+			return false; // Exit the loop after finding the current time
+		}
+	});
+}, 60000);
 	
 flatpickr('#date-picker', {
 	dateFormat: 'd-m-Y',

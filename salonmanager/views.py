@@ -55,7 +55,7 @@ def manager_login(request):
 
 #@login_required(login_url='manager_login')
 def manager_dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'reports_dashboard.html')
 
 #@login_required(login_url='manager_login')
 def list_services(request):
@@ -208,15 +208,37 @@ def book_appointment(request):
     appointment_list=[]
     staff_members=[]
     branches=[]
+    branch_all = Branch.objects.all()
+    global branch_id
+    global date_app
     today = datetime.now()
     formatted_date = today.strftime("%Y-%m-%d")
     if request.method == 'POST':
-        date = request.POST.get('date')
-        branch_id = request.POST.get('branch')
-        formatted_date = datetime.strptime(date, '%d-%m-%Y').strftime('%Y-%m-%d')
+        form_identifier = request.POST.get('form_identifier')
+        if form_identifier == 'form1':
+            date_app = request.POST.get('date')
+            branch_id = request.POST.get('branch')
+            formatted_date = datetime.strptime(date_app, '%d-%m-%Y').strftime('%Y-%m-%d')
+            
+        if form_identifier == 'form2':
+            appointment_id = request.POST.get('appointment_id')
+            selected_option= request.POST.get('option')
+            list_id = appointment_id.split() 
+            app_id = list_id[1]
+            appointment = Appointment.objects.get(id=app_id)
+            formatted_date = appointment.date
+            branch_id = appointment.branch 
+            setattr(appointment, 'status', selected_option)
+            appointment.save()
+            
+            
+        
+       
+        
         appointment_list_d = Appointment.objects.filter(date=formatted_date,branch = branch_id)
         staff_members = StaffMember.objects.filter(branches = branch_id )
-        branches = Branch.objects.filter(id = branch_id)
+        branches = Branch.objects.filter(name = branch_id)
+        
     else:
         
         if Appointment.objects.exists:
@@ -280,9 +302,9 @@ def book_appointment(request):
         'completed_app':no_of_completed,
         'confirmed_app':no_of_confirmed
     }
-
+    print(branch_all)
     
-    return render(request, 'dashboard.html',{'staff_members': staff_members,'time_slots':time_slots,'appointment_details_list':appointment_list,'branches':branches,'number_of_app' :number_of_app})
+    return render(request, 'dashboard.html',{'staff_members': staff_members,'time_slots':time_slots,'appointment_details_list':appointment_list,'branches':branches,'number_of_app' :number_of_app,'branch_all':branch_all,'formatted_date':formatted_date})
 def create_appointment(request):
      global appointment_text
      services = Service.objects.all()
@@ -357,6 +379,7 @@ def booked_appointment(request):
     global branch
     appointment_list=[]
     staff_members=[]
+    branch_all = Branch.objects.all()
     if request.method == "POST":
         customer_id = request.POST.get('customer_name')
         customer = get_object_or_404(Customer, id=customer_id)
@@ -447,22 +470,5 @@ def booked_appointment(request):
    
     
     
-    return render(request, 'dashboard.html',{'staff_members': staff_members,'branches':branches, 'appointment_details_list':appointment_list,'time_slots':time_slots,'time_slot_tf':time_slot_tf,'number_of_app' :number_of_app} )
+    return render(request, 'dashboard.html',{'staff_members': staff_members,'branches':branches, 'appointment_details_list':appointment_list,'time_slots':time_slots,'time_slot_tf':time_slot_tf,'number_of_app' :number_of_app,'branch_all':branch_all,'formatted_date':formatted_date} )
 
-def change_appointment(request):
-    list_id=[]
-    global selected_option
-    if request.method == 'POST':
-        appointment_id = request.POST.get('appointment_id')
-        selected_option= request.POST.get('option')
-        list_id = appointment_id.split() 
-        print(list_id[1])
-        appointment = Appointment.objects.get(id=list_id[1])
-        print(appointment)
-        setattr(appointment, 'status', selected_option)
-        appointment.save()
-        return redirect('book_appointment')
-
-        
-    return HttpResponse(status=200)
-    
