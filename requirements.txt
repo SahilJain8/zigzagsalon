@@ -35,9 +35,6 @@ packaging
 parso
 pickleshare
 Pillow
-pip
-platformdirs
-playsound
 prompt-toolkit
 psutil
 pure-eval
