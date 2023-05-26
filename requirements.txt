@@ -45,7 +45,7 @@ pypiwin32
 python-dateutil
 pyttsx3
 pytz-deprecation-shim
-pywin32
+
 pyzmq
 requests
 screen
