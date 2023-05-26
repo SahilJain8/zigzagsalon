@@ -3,9 +3,7 @@
         "src": "zigzagsalon/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" },
- "env": {
-      "SQLITE_VERSION": "3.8.3"
-    }
+
 
     }],
     "routes": [
